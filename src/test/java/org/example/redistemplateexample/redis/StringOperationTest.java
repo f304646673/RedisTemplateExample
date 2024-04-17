@@ -16,7 +16,7 @@ public class StringOperationTest {
 
     @Test
     public void testSet() {
-        Pair<String, String> pair = KeyGenerator.generate("testSet");
+        Pair<String, String> pair = KeyGenerator.generateString("testSet");
         final String key = pair.getFirst();
         final String value = pair.getSecond();
 
@@ -27,7 +27,7 @@ public class StringOperationTest {
 
     @Test
     public void testGet() {
-        Pair<String, String> pair = KeyGenerator.generate("testGet");
+        Pair<String, String> pair = KeyGenerator.generateString("testGet");
         final String key = pair.getFirst();
         final String value = pair.getSecond();
 
@@ -40,4 +40,18 @@ public class StringOperationTest {
             assertEquals(value, data);
         });
     }
+
+    @Test
+    public void testAppend() {
+        Pair<String, String> pair = KeyGenerator.generateString("testAppend");
+        final String key = pair.getFirst();
+        final String value = pair.getSecond();
+
+        assertDoesNotThrow(() -> {
+            assertEquals(value.length(), stringOperation.Append(key, value));
+            assertEquals(value.length() * 2, stringOperation.Append(key, value));
+        });
+    }
+
+
 }
