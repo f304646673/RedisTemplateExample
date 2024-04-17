@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 
 @SpringBootTest
@@ -71,6 +72,21 @@ public class KeyOperationTest {
             assertFalse(keyOperation.Exists(key));
             stringOperation.Set(key, value);
             assertTrue(keyOperation.Exists(key));
+        });
+    }
+
+    @Test
+    public void testExpire() {
+        Pair<String, String> pair = KeyGenerator.generate("testExpire");
+        final String key = pair.getFirst();
+        final String value = pair.getSecond();
+
+        assertDoesNotThrow(() -> {
+            stringOperation.Set(key, value);
+            assertTrue(keyOperation.Expire(key, 1, TimeUnit.SECONDS));
+            assertTrue(keyOperation.Exists(key));
+            Thread.sleep(1000);
+            assertFalse(keyOperation.Exists(key));
         });
     }
 
