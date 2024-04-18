@@ -177,7 +177,6 @@ public class KeyOperationTest {
         assertDoesNotThrow(() -> {
             Pair<String, String> pair2 = KeyGenerator.generateString("testRename2");
             final String newKey = pair2.getFirst();
-            final String newValue = pair2.getSecond();
 
             stringOperation.Set(key, value);
             assertTrue(keyOperation.Rename(key, newKey));
@@ -195,7 +194,6 @@ public class KeyOperationTest {
         assertDoesNotThrow(() -> {
             Pair<String, String> pair2 = KeyGenerator.generateString("testRenameNX2");
             final String newKey = pair2.getFirst();
-            final String newValue = pair2.getSecond();
 
             stringOperation.Set(key, value);
 

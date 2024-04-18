@@ -23,7 +23,7 @@ public class KeyGenerator {
         String key = STR."\{biz}_key_\{currentTime}";
         ArrayList<Pair<String, String>> list = new ArrayList<>();
         for (int i = 0; i < fieldCount; i++) {
-            list.add(Pair.of(key + STR."field_\{i}", STR."value_\{i}"));
+            list.add(Pair.of(key + STR."field_" + i, STR."value_" + i));
         }
         return Pair.of(key, list);
     }
@@ -34,6 +34,16 @@ public class KeyGenerator {
         ArrayList<Pair<String, Long>> list = new ArrayList<>();
         for (int i = 0; i < fieldCount; i++) {
             list.add(Pair.of(key + STR."field_\{i}", currentTime + i));
+        }
+        return Pair.of(key, list);
+    }
+
+    public static Pair<String, ArrayList<String>> generateSetString(String biz, int count) {
+        long currentTime = System.currentTimeMillis();
+        String key = STR."\{biz}_key_\{currentTime}";
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            list.add(STR."\{biz}_value_\{i}");
         }
         return Pair.of(key, list);
     }

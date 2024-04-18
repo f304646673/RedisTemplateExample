@@ -62,7 +62,6 @@ public class LongOperationTest {
         public void testIncrement() {
             Pair<String, Long> pair = KeyGenerator.generateLong("testIncrement");
             final String key = pair.getFirst();
-            final Long value = pair.getSecond();
     
             assertDoesNotThrow(() -> {
                 assertNull(longOperation.Get(key));
@@ -100,7 +99,6 @@ public class LongOperationTest {
         public void testDecrement() {
             Pair<String, Long> pair = KeyGenerator.generateLong("testDecrement");
             final String key = pair.getFirst();
-            final Long value = pair.getSecond();
 
             assertDoesNotThrow(() -> {
                 assertNull(longOperation.Get(key));
