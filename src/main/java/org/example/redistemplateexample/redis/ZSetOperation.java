@@ -165,7 +165,7 @@ public class ZSetOperation {
      * @return the number of values removed from the sorted set
      */
     public Long ZRem(String key, String... values) {
-        return redisTemplate.opsForZSet().remove(key, values);
+        return redisTemplate.opsForZSet().remove(key, (Object[])values);
     }
 
     /**
