@@ -47,5 +47,15 @@ public class KeyGenerator {
         }
         return Pair.of(key, list);
     }
+
+    public static Pair<String, ArrayList<Pair<String, Double>>> generateZSetString(String biz, int count) {
+        long currentTime = System.currentTimeMillis();
+        String key = STR."\{biz}_key_\{currentTime}";
+        ArrayList<Pair<String, Double>> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            list.add(Pair.of(STR."\{biz}_value_\{i}", (double) i));
+        }
+        return Pair.of(key, list);
+    }
     
 }

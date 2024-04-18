@@ -166,7 +166,7 @@ public class SetOperation {
      * @throws Exception if an error occurs while removing members from the set
      */
     public Long SRem(String key, String... values) throws Exception {
-        return redisTemplate.opsForSet().remove(key, values);
+        return redisTemplate.opsForSet().remove(key, (Object) values);
     }   
 
     /**
