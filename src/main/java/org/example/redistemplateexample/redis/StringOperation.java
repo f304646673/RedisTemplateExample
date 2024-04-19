@@ -65,33 +65,9 @@ public class StringOperation {
         redisTemplate.opsForValue().set(key, value, offset);
     }
 
-    public boolean SetBit(String key, long offset, boolean value) throws Exception {
-        return redisTemplate.opsForValue().setBit(key, offset, value);
-    }
-
-    public boolean GetBit(String key, long offset) throws Exception {
-        return redisTemplate.opsForValue().getBit(key, offset);
-    }
-
     public Long BitCount(String key) throws Exception {
         return redisTemplate.opsForValue().size(key);
     }
-
-//    public Long BitCount(String key, long start, long end) throws Exception {
-//        return redisTemplate.opsForValue().size(key, start, end);
-//    }
-
-//    public Long BitOp(String key, String otherKey, String destKey, RedisTemplate.BitOperation bitOperation) throws Exception {
-//        return redisTemplate.opsForValue().bitOp(bitOperation, destKey, key, otherKey);
-//    }
-
-//    public Long BitPos(String key, boolean value) throws Exception {
-//        return redisTemplate.opsForValue().bitPos(key, value);
-//    }
-
-//    public Long BitPos(String key, boolean value, long start, long end) throws Exception {
-//        return redisTemplate.opsForValue().bitPos(key, value, start, end);
-//    }
 
     public void MSet(Map<String, String> kvs) throws Exception {
         redisTemplate.opsForValue().multiSet(kvs);

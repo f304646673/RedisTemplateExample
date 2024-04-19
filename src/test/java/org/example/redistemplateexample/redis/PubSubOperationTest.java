@@ -3,12 +3,13 @@ package org.example.redistemplateexample.redis;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.util.Pair;
 
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.function.Consumer;
+import org.springframework.data.redis.connection.ReactiveSubscription;
 
 @SpringBootTest
 public class PubSubOperationTest {
@@ -22,7 +23,7 @@ public class PubSubOperationTest {
             final String channel = pair.getFirst();
             final String message = pair.getSecond();
 
-            pubSubOperation.Publish(channel, message);
+            assertEquals(0, pubSubOperation.Publish(channel, message));
         });
     }
 
@@ -33,17 +34,18 @@ public class PubSubOperationTest {
             final String channel = pair.getFirst();
             final String message = pair.getSecond();
 
-            final MessageListener listener = mock(MessageListener.class);
-            // MessageListener listener = (message1, pattern) -> {
-            //     System.out.println("Message received: " + message1.toString());
-            // };
+            Consumer<ReactiveSubscription.Message<String, String>> consumer = new Consumer<ReactiveSubscription.Message<String,String>>() {
+                @Override
+                public void accept(ReactiveSubscription.Message<String, String> message) {
+                    assertEquals(channel, message.getChannel());
+                    assertEquals(message, message.getMessage());
+                }
+            };
+            pubSubOperation.Subscribe(channel, consumer);
 
-            pubSubOperation.Subscribe(channel, listener);
             sleep(1000);
-            pubSubOperation.Publish(channel, message);
+            assertEquals(1, pubSubOperation.Publish(channel, message));
             sleep(1000);
-            verify(listener, only()).onMessage(any(), any());
-
         });
     }
 }
