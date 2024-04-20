@@ -32,7 +32,6 @@ public class HashOperationTest {
         assertEquals(1, hashOperation.HDel(key, field));
 
         assertFalse(hashOperation.HExists(key, field));
-
     }
 
     @Test
@@ -46,7 +45,6 @@ public class HashOperationTest {
 
         hashOperation.HSet(key, field, value);
         assertTrue(hashOperation.HExists(key, field));
-
     }
 
     @Test
@@ -62,7 +60,6 @@ public class HashOperationTest {
         String data = hashOperation.HGet(key, field);
         assertNotNull(data);
         assertEquals(value, data);
-
     }
 
     @Test
@@ -76,7 +73,6 @@ public class HashOperationTest {
 
         hashOperation.HSet(key, field, value);
         assertEquals(1, hashOperation.HGetAll(key).size());
-
     }
 
     @Test
@@ -88,7 +84,6 @@ public class HashOperationTest {
 
         assertEquals(value, hashOperation.HIncrBy(key, field, value));
         assertEquals(value * 2, hashOperation.HIncrBy(key, field, value));
-
     }
 
     @Test
@@ -100,7 +95,6 @@ public class HashOperationTest {
 
         assertEquals(1.0, hashOperation.HIncrByFloat(key, field, 1.0));
         assertEquals(value + 1, hashOperation.HIncrByFloat(key, field, value));
-
     }
 
     @Test
@@ -114,7 +108,6 @@ public class HashOperationTest {
 
         hashOperation.HSet(key, field, value);
         assertEquals(1, hashOperation.HKeys(key).size());
-
     }
 
     @Test
@@ -128,7 +121,6 @@ public class HashOperationTest {
 
         hashOperation.HSet(key, field, value);
         assertEquals(1, hashOperation.HLen(key));
-
     }
 
     @Test
@@ -150,7 +142,6 @@ public class HashOperationTest {
         hashOperation.HSet(key, field1, value1);
         hashOperation.HSet(key, field2, value2);
         assertEquals(2, hashOperation.HMGet(key, fields).size());
-
     }
 
     @Test
@@ -170,7 +161,6 @@ public class HashOperationTest {
         };
         hashOperation.HMSet(key, kvs);
         assertEquals(2, hashOperation.HLen(key));
-
     }
 
     @Test
@@ -181,7 +171,6 @@ public class HashOperationTest {
         final String value = pair.getSecond().getFirst().getSecond();
 
         hashOperation.HSet(key, field, value);
-
     }
 
     @Test
@@ -193,7 +182,6 @@ public class HashOperationTest {
 
         assertTrue(hashOperation.HSetNX(key, field, value));
         assertFalse(hashOperation.HSetNX(key, field, value));
-
     }
 
     @Test
@@ -207,7 +195,6 @@ public class HashOperationTest {
 
         hashOperation.HSet(key, field, value);
         assertEquals(1, hashOperation.HVals(key).size());
-
     }
 
 }

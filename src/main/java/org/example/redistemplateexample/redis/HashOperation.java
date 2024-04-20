@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class HashOperation {
@@ -88,8 +89,9 @@ public class HashOperation {
      * @param key the key of the hash
      * @return a set containing all the field names (keys) from the hash
      */
-    public Set<Object> HKeys(String key) {
-        return redisTemplate.opsForHash().keys(key);
+    public Set<String> HKeys(String key) {
+        Set<Object> keys = redisTemplate.opsForHash().keys(key);
+        return keys.stream().map(Object::toString).collect(Collectors.toSet());
     }
 
     /**
@@ -112,8 +114,9 @@ public class HashOperation {
      * @return a list of values associated with the specified fields, in the same
      *         order as the fields
      */
-    public List<Object> HMGet(String key, List<Object> fields) {
-        return redisTemplate.opsForHash().multiGet(key, fields);
+    public List<String> HMGet(String key, List<Object> fields) {
+        List<Object> multiGet = redisTemplate.opsForHash().multiGet(key, fields);
+        return multiGet.stream().map(Object::toString).collect(Collectors.toList());
     }
 
     /**
@@ -157,8 +160,9 @@ public class HashOperation {
      * @param key the key of the hash
      * @return a list containing all values associated with the hash `key`
      */
-    public List<Object> HVals(String key) {
-        return redisTemplate.opsForHash().values(key);
+    public List<String> HVals(String key) {
+        List<Object> values = redisTemplate.opsForHash().values(key);
+        return values.stream().map(Object::toString).collect(Collectors.toList());
     }
 
 }
