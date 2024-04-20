@@ -10,31 +10,31 @@ public class LongOperation {
     @Resource
     private RedisTemplate<String, Long> redisTemplate;
 
-    public void Set(String key, Long value) throws Exception {
+    public void Set(String key, Long value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    public Long Get(String key) throws Exception {
+    public Long Get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
-    public Long GetAndSet(String key, Long value) throws Exception {
+    public Long GetAndSet(String key, Long value) {
         return redisTemplate.opsForValue().getAndSet(key, value);
     }
 
-    public Long Increment(String key) throws Exception {
+    public Long Increment(String key) {
         return redisTemplate.opsForValue().increment(key);
     }
 
-    public Long IncrementBy(String key, Long value) throws Exception {
+    public Long IncrementBy(String key, Long value) {
         return redisTemplate.opsForValue().increment(key, value);
     }
 
-    public Long Decrement(String key) throws Exception {
+    public Long Decrement(String key) {
         return redisTemplate.opsForValue().decrement(key);
     }
 
-    public Long DecrementBy(String key, Long value) throws Exception {
+    public Long DecrementBy(String key, Long value) {
         return redisTemplate.opsForValue().decrement(key, value);
     }
 

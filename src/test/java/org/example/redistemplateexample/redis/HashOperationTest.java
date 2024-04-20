@@ -25,17 +25,16 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertFalse(hashOperation.HExists(key, field));
+        assertFalse(hashOperation.HExists(key, field));
 
-            hashOperation.HSet(key, field, value);
-            assertTrue(hashOperation.HExists(key, field));
-            assertEquals(1, hashOperation.HDel(key, field));
-            
-            assertFalse(hashOperation.HExists(key, field));
-        });
+        hashOperation.HSet(key, field, value);
+        assertTrue(hashOperation.HExists(key, field));
+        assertEquals(1, hashOperation.HDel(key, field));
+
+        assertFalse(hashOperation.HExists(key, field));
+
     }
-    
+
     @Test
     public void testHExists() {
         Pair<String, ArrayList<Pair<String, String>>> pair = KeyGenerator.generateHashString("testHExists", 1);
@@ -43,13 +42,11 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
+        assertFalse(hashOperation.HExists(key, field));
 
-        assertDoesNotThrow(() -> {
-            assertFalse(hashOperation.HExists(key, field));
+        hashOperation.HSet(key, field, value);
+        assertTrue(hashOperation.HExists(key, field));
 
-            hashOperation.HSet(key, field, value);
-            assertTrue(hashOperation.HExists(key, field));
-        });
     }
 
     @Test
@@ -59,16 +56,15 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertNull(hashOperation.HGet(key, field));
+        assertNull(hashOperation.HGet(key, field));
 
-            hashOperation.HSet(key, field, value);
-            String data = hashOperation.HGet(key, field);
-            assertNotNull(data);
-            assertEquals(value, data);
-        });
+        hashOperation.HSet(key, field, value);
+        String data = hashOperation.HGet(key, field);
+        assertNotNull(data);
+        assertEquals(value, data);
+
     }
-    
+
     @Test
     public void testHGetAll() {
         Pair<String, ArrayList<Pair<String, String>>> pair = KeyGenerator.generateHashString("testHGetAll", 1);
@@ -76,14 +72,13 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertTrue(hashOperation.HGetAll(key).isEmpty());
+        assertTrue(hashOperation.HGetAll(key).isEmpty());
 
-            hashOperation.HSet(key, field, value);
-            assertEquals(1, hashOperation.HGetAll(key).size());
-        });
+        hashOperation.HSet(key, field, value);
+        assertEquals(1, hashOperation.HGetAll(key).size());
+
     }
-    
+
     @Test
     public void testHIncrBy() {
         Pair<String, ArrayList<Pair<String, Long>>> pair = KeyGenerator.generateHashLong("testHIncrBy", 1);
@@ -91,10 +86,9 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final Long value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(value, hashOperation.HIncrBy(key, field, value));
-            assertEquals(value * 2, hashOperation.HIncrBy(key, field, value));
-        });
+        assertEquals(value, hashOperation.HIncrBy(key, field, value));
+        assertEquals(value * 2, hashOperation.HIncrBy(key, field, value));
+
     }
 
     @Test
@@ -104,10 +98,9 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final Long value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(1.0, hashOperation.HIncrByFloat(key, field,1.0));
-            assertEquals(value + 1, hashOperation.HIncrByFloat(key, field, value));
-        });
+        assertEquals(1.0, hashOperation.HIncrByFloat(key, field, 1.0));
+        assertEquals(value + 1, hashOperation.HIncrByFloat(key, field, value));
+
     }
 
     @Test
@@ -117,12 +110,11 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertTrue(hashOperation.HKeys(key).isEmpty());
+        assertTrue(hashOperation.HKeys(key).isEmpty());
 
-            hashOperation.HSet(key, field, value);
-            assertEquals(1, hashOperation.HKeys(key).size());
-        });
+        hashOperation.HSet(key, field, value);
+        assertEquals(1, hashOperation.HKeys(key).size());
+
     }
 
     @Test
@@ -132,12 +124,11 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(0, hashOperation.HLen(key));
+        assertEquals(0, hashOperation.HLen(key));
 
-            hashOperation.HSet(key, field, value);
-            assertEquals(1, hashOperation.HLen(key));
-        });
+        hashOperation.HSet(key, field, value);
+        assertEquals(1, hashOperation.HLen(key));
+
     }
 
     @Test
@@ -149,19 +140,17 @@ public class HashOperationTest {
         final String field2 = pair.getSecond().get(1).getFirst();
         final String value2 = pair.getSecond().get(1).getSecond();
 
+        List<Object> fields = new ArrayList<>() {
+            {
+                add(field1);
+                add(field2);
+            }
+        };
 
-        assertDoesNotThrow(() -> {
-            List<Object> fields = new ArrayList<>() {
-                {
-                    add(field1);
-                    add(field2);
-                }
-            };
+        hashOperation.HSet(key, field1, value1);
+        hashOperation.HSet(key, field2, value2);
+        assertEquals(2, hashOperation.HMGet(key, fields).size());
 
-            hashOperation.HSet(key, field1, value1);
-            hashOperation.HSet(key, field2, value2);
-            assertEquals(2, hashOperation.HMGet(key, fields).size());
-        });
     }
 
     @Test
@@ -173,18 +162,16 @@ public class HashOperationTest {
         final String field2 = pair.getSecond().get(1).getFirst();
         final String value2 = pair.getSecond().get(1).getSecond();
 
-        assertDoesNotThrow(() -> {
-            Map<String, String> kvs = new HashMap<>() {
-                {
-                    put(field1, value1);
-                    put(field2, value2);
-                }
-            };
-            hashOperation.HMSet(key, kvs);
-            assertEquals(2, hashOperation.HLen(key));
-        });
+        Map<String, String> kvs = new HashMap<>() {
+            {
+                put(field1, value1);
+                put(field2, value2);
+            }
+        };
+        hashOperation.HMSet(key, kvs);
+        assertEquals(2, hashOperation.HLen(key));
+
     }
-        
 
     @Test
     public void testHSet() {
@@ -193,10 +180,8 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
+        hashOperation.HSet(key, field, value);
 
-        assertDoesNotThrow(() -> {
-            hashOperation.HSet(key, field, value);
-        });
     }
 
     @Test
@@ -206,10 +191,9 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertTrue(hashOperation.HSetNX(key, field, value));
-            assertFalse(hashOperation.HSetNX(key, field, value));
-        });
+        assertTrue(hashOperation.HSetNX(key, field, value));
+        assertFalse(hashOperation.HSetNX(key, field, value));
+
     }
 
     @Test
@@ -219,12 +203,11 @@ public class HashOperationTest {
         final String field = pair.getSecond().getFirst().getFirst();
         final String value = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertTrue(hashOperation.HVals(key).isEmpty());
+        assertTrue(hashOperation.HVals(key).isEmpty());
 
-            hashOperation.HSet(key, field, value);
-            assertEquals(1, hashOperation.HVals(key).size());
-        });
+        hashOperation.HSet(key, field, value);
+        assertEquals(1, hashOperation.HVals(key).size());
+
     }
 
 }

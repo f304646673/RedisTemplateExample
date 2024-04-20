@@ -5,11 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.Pair;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-
 
 @SpringBootTest
 public class ZSetOperationTest {
@@ -24,9 +22,7 @@ public class ZSetOperationTest {
         final String member = pair.getSecond().getFirst().getFirst();
         final double score = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(true, zSetOperation.ZAdd(key, member, score));
-        });
+        assertEquals(true, zSetOperation.ZAdd(key, member, score));
     }
 
     @Test
@@ -36,12 +32,10 @@ public class ZSetOperationTest {
         final String member = pair.getSecond().getFirst().getFirst();
         final double score = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(0, zSetOperation.ZCard(key));
+        assertEquals(0, zSetOperation.ZCard(key));
 
-            zSetOperation.ZAdd(key, member, score);
-            assertEquals(1, zSetOperation.ZCard(key));
-        });
+        zSetOperation.ZAdd(key, member, score);
+        assertEquals(1, zSetOperation.ZCard(key));
     }
 
     @Test
@@ -51,12 +45,10 @@ public class ZSetOperationTest {
         final String member = pair.getSecond().getFirst().getFirst();
         final double score = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(0, zSetOperation.ZCount(key, 0, 1));
+        assertEquals(0, zSetOperation.ZCount(key, 0, 1));
 
-            zSetOperation.ZAdd(key, member, score);
-            assertEquals(1, zSetOperation.ZCount(key, 0, 1));
-        });
+        zSetOperation.ZAdd(key, member, score);
+        assertEquals(1, zSetOperation.ZCount(key, 0, 1));
     }
 
     @Test
@@ -66,10 +58,8 @@ public class ZSetOperationTest {
         final String member = pair.getSecond().getFirst().getFirst();
         final double score = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(0, zSetOperation.ZIncrBy(key, member, score));
-            assertEquals(score, zSetOperation.ZIncrBy(key, member, score));
-        });
+        assertEquals(0, zSetOperation.ZIncrBy(key, member, score));
+        assertEquals(score, zSetOperation.ZIncrBy(key, member, score));
     }
 
     @Test
@@ -83,13 +73,11 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            assertEquals(3, zSetOperation.ZRange(key, 0, 2).size());
-        });
+        assertEquals(3, zSetOperation.ZRange(key, 0, 2).size());
     }
 
     @Test
@@ -103,21 +91,20 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            final double min = Math.min(score1, Math.min(score2, score3));
-            final double max = Math.max(score1, Math.max(score2, score3));
+        final double min = Math.min(score1, Math.min(score2, score3));
+        final double max = Math.max(score1, Math.max(score2, score3));
 
-            assertEquals(3, zSetOperation.ZRangeByScore(key, min, max).size());
-        });
+        assertEquals(3, zSetOperation.ZRangeByScore(key, min, max).size());
     }
 
     @Test
     public void testZRangeByScoreWithScores() {
-        Pair<String, ArrayList<Pair<String, Double>>> pair = KeyGenerator.generateZSetString("testRangeByScoreWithScores", 3);
+        Pair<String, ArrayList<Pair<String, Double>>> pair = KeyGenerator
+                .generateZSetString("testRangeByScoreWithScores", 3);
         final String key = pair.getFirst();
         final String member1 = pair.getSecond().get(0).getFirst();
         final double score1 = pair.getSecond().get(0).getSecond();
@@ -126,19 +113,15 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            final double min = Math.min(score1, Math.min(score2, score3));
-            final double max = Math.max(score1, Math.max(score2, score3));
+        final double min = Math.min(score1, Math.min(score2, score3));
+        final double max = Math.max(score1, Math.max(score2, score3));
 
-            assertEquals(3, zSetOperation.ZRangeByScoreWithScores(key, min, max).size());
-        });
+        assertEquals(3, zSetOperation.ZRangeByScoreWithScores(key, min, max).size());
     }
-
-
 
     @Test
     public void testZRank() {
@@ -151,15 +134,13 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            assertEquals(0, zSetOperation.ZRank(key, member1));
-            assertEquals(1, zSetOperation.ZRank(key, member2));
-            assertEquals(2, zSetOperation.ZRank(key, member3));
-        });
+        assertEquals(0, zSetOperation.ZRank(key, member1));
+        assertEquals(1, zSetOperation.ZRank(key, member2));
+        assertEquals(2, zSetOperation.ZRank(key, member3));
     }
 
     @Test
@@ -173,13 +154,11 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            assertEquals(3, zSetOperation.ZRem(key, member1, member2, member3));
-        });
+        assertEquals(3, zSetOperation.ZRem(key, member1, member2, member3));
     }
 
     @Test
@@ -193,13 +172,11 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            assertEquals(3, zSetOperation.ZRemRange(key, 0, 2));
-        });
+        assertEquals(3, zSetOperation.ZRemRange(key, 0, 2));
     }
 
     @Test
@@ -213,16 +190,14 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            final double min = Math.min(score1, Math.min(score2, score3));
-            final double max = Math.max(score1, Math.max(score2, score3));
+        final double min = Math.min(score1, Math.min(score2, score3));
+        final double max = Math.max(score1, Math.max(score2, score3));
 
-            assertEquals(3, zSetOperation.ZRemRangeByScore(key, min, max));
-        });
+        assertEquals(3, zSetOperation.ZRemRangeByScore(key, min, max));
     }
 
     @Test
@@ -236,13 +211,11 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            assertEquals(3, zSetOperation.ZRevRange(key, 0, 2).size());
-        });
+        assertEquals(3, zSetOperation.ZRevRange(key, 0, 2).size());
     }
 
     @Test
@@ -256,21 +229,20 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            final double min = Math.min(score1, Math.min(score2, score3));
-            final double max = Math.max(score1, Math.max(score2, score3));
+        final double min = Math.min(score1, Math.min(score2, score3));
+        final double max = Math.max(score1, Math.max(score2, score3));
 
-            assertEquals(3, zSetOperation.ZRevRangeByScore(key, min, max).size());
-        });
+        assertEquals(3, zSetOperation.ZRevRangeByScore(key, min, max).size());
     }
 
     @Test
     public void testZRevRangeByScoreWithScores() {
-        Pair<String, ArrayList<Pair<String, Double>>> pair = KeyGenerator.generateZSetString("testRevRangeByScoreWithScores", 3);
+        Pair<String, ArrayList<Pair<String, Double>>> pair = KeyGenerator
+                .generateZSetString("testRevRangeByScoreWithScores", 3);
         final String key = pair.getFirst();
         final String member1 = pair.getSecond().get(0).getFirst();
         final double score1 = pair.getSecond().get(0).getSecond();
@@ -279,16 +251,14 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            final double min = Math.min(score1, Math.min(score2, score3));
-            final double max = Math.max(score1, Math.max(score2, score3));
+        final double min = Math.min(score1, Math.min(score2, score3));
+        final double max = Math.max(score1, Math.max(score2, score3));
 
-            assertEquals(3, zSetOperation.ZRevRangeByScoreWithScores(key, min, max).size());
-        });
+        assertEquals(3, zSetOperation.ZRevRangeByScoreWithScores(key, min, max).size());
     }
 
     @Test
@@ -302,15 +272,13 @@ public class ZSetOperationTest {
         final String member3 = pair.getSecond().get(2).getFirst();
         final double score3 = pair.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member1, score1);
-            zSetOperation.ZAdd(key, member2, score2);
-            zSetOperation.ZAdd(key, member3, score3);
+        zSetOperation.ZAdd(key, member1, score1);
+        zSetOperation.ZAdd(key, member2, score2);
+        zSetOperation.ZAdd(key, member3, score3);
 
-            assertEquals(2, zSetOperation.ZRevRank(key, member1));
-            assertEquals(1, zSetOperation.ZRevRank(key, member2));
-            assertEquals(0, zSetOperation.ZRevRank(key, member3));
-        });
+        assertEquals(2, zSetOperation.ZRevRank(key, member1));
+        assertEquals(1, zSetOperation.ZRevRank(key, member2));
+        assertEquals(0, zSetOperation.ZRevRank(key, member3));
     }
 
     @Test
@@ -320,10 +288,8 @@ public class ZSetOperationTest {
         final String member = pair.getSecond().getFirst().getFirst();
         final double score = pair.getSecond().getFirst().getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key, member, score);
-            assertEquals(score, zSetOperation.ZScore(key, member));
-        });
+        zSetOperation.ZAdd(key, member, score);
+        assertEquals(score, zSetOperation.ZScore(key, member));
     }
 
     @Test
@@ -346,17 +312,15 @@ public class ZSetOperationTest {
         final String member6 = pair2.getSecond().get(2).getFirst();
         final double score6 = pair2.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key1, member1, score1);
-            zSetOperation.ZAdd(key1, member2, score2);
-            zSetOperation.ZAdd(key1, member3, score3);
+        zSetOperation.ZAdd(key1, member1, score1);
+        zSetOperation.ZAdd(key1, member2, score2);
+        zSetOperation.ZAdd(key1, member3, score3);
 
-            zSetOperation.ZAdd(key2, member4, score4);
-            zSetOperation.ZAdd(key2, member5, score5);
-            zSetOperation.ZAdd(key2, member6, score6);
+        zSetOperation.ZAdd(key2, member4, score4);
+        zSetOperation.ZAdd(key2, member5, score5);
+        zSetOperation.ZAdd(key2, member6, score6);
 
-            assertEquals(6, zSetOperation.ZUnion(key1, key2).size());
-        });
+        assertEquals(6, zSetOperation.ZUnion(key1, key2).size());
     }
 
     @Test
@@ -381,17 +345,15 @@ public class ZSetOperationTest {
 
         final String destKey = "testUnionAndStoreDest";
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key1, member1, score1);
-            zSetOperation.ZAdd(key1, member2, score2);
-            zSetOperation.ZAdd(key1, member3, score3);
+        zSetOperation.ZAdd(key1, member1, score1);
+        zSetOperation.ZAdd(key1, member2, score2);
+        zSetOperation.ZAdd(key1, member3, score3);
 
-            zSetOperation.ZAdd(key2, member4, score4);
-            zSetOperation.ZAdd(key2, member5, score5);
-            zSetOperation.ZAdd(key2, member6, score6);
+        zSetOperation.ZAdd(key2, member4, score4);
+        zSetOperation.ZAdd(key2, member5, score5);
+        zSetOperation.ZAdd(key2, member6, score6);
 
-            assertEquals(6, zSetOperation.ZUnionAndStore(key1, key2, destKey));
-        });
+        assertEquals(6, zSetOperation.ZUnionAndStore(key1, key2, destKey));
     }
 
     @Test
@@ -414,17 +376,15 @@ public class ZSetOperationTest {
         final String member6 = pair2.getSecond().get(2).getFirst();
         final double score6 = pair2.getSecond().get(2).getSecond();
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key1, member1, score1);
-            zSetOperation.ZAdd(key1, member2, score2);
-            zSetOperation.ZAdd(key1, member3, score3);
+        zSetOperation.ZAdd(key1, member1, score1);
+        zSetOperation.ZAdd(key1, member2, score2);
+        zSetOperation.ZAdd(key1, member3, score3);
 
-            zSetOperation.ZAdd(key2, member4, score4);
-            zSetOperation.ZAdd(key2, member5, score5);
-            zSetOperation.ZAdd(key2, member6, score6);
+        zSetOperation.ZAdd(key2, member4, score4);
+        zSetOperation.ZAdd(key2, member5, score5);
+        zSetOperation.ZAdd(key2, member6, score6);
 
-            assertEquals(0, zSetOperation.ZInter(key1, key2).size());
-        });
+        assertEquals(0, zSetOperation.ZInter(key1, key2).size());
     }
 
     @Test
@@ -449,18 +409,15 @@ public class ZSetOperationTest {
 
         final String destKey = "testInterAndStoreDest";
 
-        assertDoesNotThrow(() -> {
-            zSetOperation.ZAdd(key1, member1, score1);
-            zSetOperation.ZAdd(key1, member2, score2);
-            zSetOperation.ZAdd(key1, member3, score3);
+        zSetOperation.ZAdd(key1, member1, score1);
+        zSetOperation.ZAdd(key1, member2, score2);
+        zSetOperation.ZAdd(key1, member3, score3);
 
-            zSetOperation.ZAdd(key2, member4, score4);
-            zSetOperation.ZAdd(key2, member5, score5);
-            zSetOperation.ZAdd(key2, member6, score6);
+        zSetOperation.ZAdd(key2, member4, score4);
+        zSetOperation.ZAdd(key2, member5, score5);
+        zSetOperation.ZAdd(key2, member6, score6);
 
-            assertEquals(0, zSetOperation.ZInterAndStore(key1, key2, destKey));
-        });
+        assertEquals(0, zSetOperation.ZInterAndStore(key1, key2, destKey));
     }
-
 
 }

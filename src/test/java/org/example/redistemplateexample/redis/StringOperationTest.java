@@ -1,6 +1,5 @@
 package org.example.redistemplateexample.redis;
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +19,7 @@ public class StringOperationTest {
         final String key = pair.getFirst();
         final String value = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertTrue(stringOperation.Set(key, value));
-        });
+        assertTrue(stringOperation.Set(key, value));
     }
 
     @Test
@@ -31,14 +28,12 @@ public class StringOperationTest {
         final String key = pair.getFirst();
         final String value = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertNull(stringOperation.Get(key));
+        assertNull(stringOperation.Get(key));
 
-            assertTrue(stringOperation.Set(key, value));
-            String data = stringOperation.Get(key);
-            assertNotNull(data);
-            assertEquals(value, data);
-        });
+        assertTrue(stringOperation.Set(key, value));
+        String data = stringOperation.Get(key);
+        assertNotNull(data);
+        assertEquals(value, data);
     }
 
     @Test
@@ -47,11 +42,8 @@ public class StringOperationTest {
         final String key = pair.getFirst();
         final String value = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            assertEquals(value.length(), stringOperation.Append(key, value));
-            assertEquals(value.length() * 2, stringOperation.Append(key, value));
-        });
+        assertEquals(value.length(), stringOperation.Append(key, value));
+        assertEquals(value.length() * 2, stringOperation.Append(key, value));
     }
-
 
 }

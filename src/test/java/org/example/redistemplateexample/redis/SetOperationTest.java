@@ -1,8 +1,5 @@
 package org.example.redistemplateexample.redis;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.Pair;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class SetOperationTest {
@@ -25,9 +24,7 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-        });
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
     }
 
     @Test
@@ -36,10 +33,8 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-            assertEquals(values.size(), setOperation.SCard(key));
-        });
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
+        assertEquals(values.size(), setOperation.SCard(key));
     }
 
     @Test
@@ -52,12 +47,10 @@ public class SetOperationTest {
         final String keyOther = pairOther.getFirst();
         final ArrayList<String> valuesOther = pairOther.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-            setOperation.SAdd(keyOther, valuesOther.toArray(new String[0]));
+        assertEquals(3,setOperation.SAdd(key, values.toArray(new String[0])));
+        assertEquals(4,setOperation.SAdd(keyOther, valuesOther.toArray(new String[0])));
 
-            assertEquals(values.size(), setOperation.SDiff(key, keyOther).size());
-        });
+        assertEquals(values.size(), setOperation.SDiff(key, keyOther).size());
     }   
 
     @Test
@@ -73,13 +66,11 @@ public class SetOperationTest {
         Pair<String, ArrayList<String>> pairDest = KeyGenerator.generateSetString("testSDiffStore3", 0);
         final String destKey = pairDest.getFirst();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-            setOperation.SAdd(otherKey, valuesOther.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
+        assertEquals(4, setOperation.SAdd(otherKey, valuesOther.toArray(new String[0])));
 
-            assertEquals(values.size(), setOperation.SDiffStore(key, otherKey, destKey));
-            assertEquals(values.size(), setOperation.SMembers(destKey).size());
-        });
+        assertEquals(values.size(), setOperation.SDiffStore(key, otherKey, destKey));
+        assertEquals(values.size(), setOperation.SMembers(destKey).size());
     }
 
     @Test
@@ -92,12 +83,10 @@ public class SetOperationTest {
         final String keyOther = pairOther.getFirst();
         final ArrayList<String> valuesOther = pairOther.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-            setOperation.SAdd(keyOther, valuesOther.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
+        assertEquals(4, setOperation.SAdd(keyOther, valuesOther.toArray(new String[0])));
 
-            assertEquals(0, setOperation.SInter(key, keyOther).size());
-        });
+        assertEquals(0, setOperation.SInter(key, keyOther).size());
     }
 
     @Test
@@ -113,13 +102,11 @@ public class SetOperationTest {
         Pair<String, ArrayList<String>> pairDest = KeyGenerator.generateSetString("testSInterStore3", 0);
         final String destKey = pairDest.getFirst();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-            setOperation.SAdd(otherKey, valuesOther.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
+        assertEquals(4, setOperation.SAdd(otherKey, valuesOther.toArray(new String[0])));
 
-            assertEquals(0, setOperation.SInterStore(key, otherKey, destKey));
-            assertEquals(0, setOperation.SMembers(destKey).size());
-        });
+        assertEquals(0, setOperation.SInterStore(key, otherKey, destKey));
+        assertEquals(0, setOperation.SMembers(destKey).size());
     }
 
     @Test
@@ -128,13 +115,11 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
 
-            for (String value : values) {
-                assertEquals(true, setOperation.SIsMember(key, value));
-            }
-        });
+        for (String value : values) {
+            assertTrue(setOperation.SIsMember(key, value));
+        }
     }
 
     @Test
@@ -143,15 +128,13 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
 
-            Set<String> members = setOperation.SMembers(key);
-            assertEquals(values.size(), members.size());
-            for (String value : values) {
-                assertEquals(true, members.contains(value));
-            }
-        });
+        Set<String> members = setOperation.SMembers(key);
+        assertEquals(values.size(), members.size());
+        for (String value : values) {
+            assertTrue(members.contains(value));
+        }
     }
 
     @Test
@@ -163,15 +146,13 @@ public class SetOperationTest {
         Pair<String, ArrayList<String>> pairOther = KeyGenerator.generateSetString("testSMove2", 0);
         final String otherKey = pairOther.getFirst();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
 
-            for (String value : values) {
-                assertEquals(true, setOperation.SMove(key, value, otherKey));
-            }
+        for (String value : values) {
+            assertTrue(setOperation.SMove(key, value, otherKey));
+        }
 
-            assertEquals(values.size(), setOperation.SMembers(otherKey).size());
-        });
+        assertEquals(values.size(), setOperation.SMembers(otherKey).size());
     }
 
     @Test
@@ -180,15 +161,13 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
 
-            for (int i = 0; i < values.size(); i++) {
-                assertEquals(true, values.contains(setOperation.SPop(key)));
-            }
+        for (int i = 0; i < values.size(); i++) {
+            assertTrue(values.contains(setOperation.SPop(key)));
+        }
 
-            assertEquals(0, setOperation.SCard(key));
-        });
+        assertEquals(0, setOperation.SCard(key));
     }
 
     @Test
@@ -197,13 +176,11 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
 
-            for (int i = 0; i < values.size(); i++) {
-                assertEquals(true, values.contains(setOperation.SRandMember(key)));
-            }
-        });
+        for (int i = 0; i < values.size(); i++) {
+            assertTrue(values.contains(setOperation.SRandMember(key)));
+        }
     }
 
     @Test
@@ -212,17 +189,15 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
 
-            for (int i = 0; i < values.size(); i++) {
-                List<String> sRandMember = setOperation.SRandMember(key, values.size());
-                assertEquals(values.size(), sRandMember.size());
-                for (String value : sRandMember) {
-                    assertEquals(true, values.contains(value));
-                }
+        for (int i = 0; i < values.size(); i++) {
+            List<String> sRandMember = setOperation.SRandMember(key, values.size());
+            assertEquals(values.size(), sRandMember.size());
+            for (String value : sRandMember) {
+                assertTrue(values.contains(value));
             }
-        });
+        }
     }
 
     @Test
@@ -231,13 +206,11 @@ public class SetOperationTest {
         final String key = pair.getFirst();
         final ArrayList<String> values = pair.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
 
-            assertEquals(values.size(), setOperation.SRem(key, values.toArray(new String[0])));
+        assertEquals(values.size(), setOperation.SRem(key, values.toArray(new String[0])));
 
-            assertEquals(0, setOperation.SCard(key));
-        });
+        assertEquals(0, setOperation.SCard(key));
     }
 
 
@@ -251,18 +224,16 @@ public class SetOperationTest {
         final String keyOther = pairOther.getFirst();
         final ArrayList<String> valuesOther = pairOther.getSecond();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-            setOperation.SAdd(keyOther, valuesOther.toArray(new String[0]));
-            Set<String> sUnion = setOperation.SUnion(key, keyOther);
-            assertEquals(values.size() + valuesOther.size(), sUnion.size());
-            for (String value : values) {
-                assertEquals(true, sUnion.contains(value));
-            }
-            for (String value : valuesOther) {
-                assertEquals(true, sUnion.contains(value));
-            }
-        });
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
+        assertEquals(4, setOperation.SAdd(keyOther, valuesOther.toArray(new String[0])));
+        Set<String> sUnion = setOperation.SUnion(key, keyOther);
+        assertEquals(values.size() + valuesOther.size(), sUnion.size());
+        for (String value : values) {
+            assertTrue(sUnion.contains(value));
+        }
+        for (String value : valuesOther) {
+            assertTrue(sUnion.contains(value));
+        }
     }
 
     @Test
@@ -278,12 +249,10 @@ public class SetOperationTest {
         Pair<String, ArrayList<String>> pairDest = KeyGenerator.generateSetString("testSUnionStore3", 0);
         final String destKey = pairDest.getFirst();
 
-        assertDoesNotThrow(() -> {
-            setOperation.SAdd(key, values.toArray(new String[0]));
-            setOperation.SAdd(otherKey, valuesOther.toArray(new String[0]));
+        assertEquals(3, setOperation.SAdd(key, values.toArray(new String[0])));
+        assertEquals(4, setOperation.SAdd(otherKey, valuesOther.toArray(new String[0])));
 
-            assertEquals(values.size() + valuesOther.size(), setOperation.SUnionStore(key, otherKey, destKey));
-            assertEquals(values.size() + valuesOther.size(), setOperation.SMembers(destKey).size());
-        });
+        assertEquals(values.size() + valuesOther.size(), setOperation.SUnionStore(key, otherKey, destKey));
+        assertEquals(values.size() + valuesOther.size(), setOperation.SMembers(destKey).size());
     }
 }

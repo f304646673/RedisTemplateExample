@@ -25,13 +25,7 @@ public class ZSetOperation {
      * @return true if the member was added successfully, false otherwise
      */
     public boolean ZAdd(String key, String value, double score) {
-        try {
-            redisTemplate.opsForZSet().add(key, value, score);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return Boolean.TRUE.equals(redisTemplate.opsForZSet().add(key, value, score));
     }
 
     /**

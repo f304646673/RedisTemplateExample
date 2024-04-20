@@ -13,55 +13,151 @@ public class HashOperation {
     @Resource
     private RedisTemplate<String, String> redisTemplate;
 
-    public Long HDel(String key, String field) throws Exception {
+    /**
+     * Deletes a hash field from a Redis key.
+     *
+     * @param key   the Redis key
+     * @param field the field to delete
+     * @return the number of fields deleted
+     */
+    public Long HDel(String key, String field) {
         return redisTemplate.opsForHash().delete(key, field);
     }
 
-    public boolean HExists(String key, String field) throws Exception {
+    /**
+     * Checks if a field exists in the hash stored at the given key.
+     *
+     * @param key   the key of the hash
+     * @param field the field to check for existence
+     * @return true if the field exists, false otherwise
+     */
+    public boolean HExists(String key, String field) {
         return redisTemplate.opsForHash().hasKey(key, field);
     }
 
-    public String HGet(String key, String field) throws Exception {
+    /**
+     * Retrieves the value associated with the specified field in the hash stored at
+     * the given key.
+     *
+     * @param key   the key of the hash
+     * @param field the field within the hash
+     * @return the value associated with the field, or null if either the key or the
+     *         field does not exist
+     */
+    public String HGet(String key, String field) {
         return (String) redisTemplate.opsForHash().get(key, field);
     }
 
-    public Map<Object, Object> HGetAll(String key) throws Exception {
+    /**
+     * Retrieves all the fields and values from a hash stored at the specified key.
+     *
+     * @param key the key of the hash
+     * @return a map containing all the fields and values from the hash
+     */
+    public Map<Object, Object> HGetAll(String key) {
         return redisTemplate.opsForHash().entries(key);
     }
 
-    public Long HIncrBy(String key, String field, long increment) throws Exception {
+    /**
+     * Increments the value of a hash field by the given increment.
+     *
+     * @param key       the key of the hash
+     * @param field     the field within the hash
+     * @param increment the increment value
+     * @return the new value after incrementing the field
+     */
+    public Long HIncrBy(String key, String field, long increment) {
         return redisTemplate.opsForHash().increment(key, field, increment);
     }
 
-    public Double HIncrByFloat(String key, String field, double increment) throws Exception {
+    /**
+     * Increments the value of a hash field by the given increment.
+     *
+     * @param key       the key of the hash
+     * @param field     the field within the hash
+     * @param increment the increment value
+     * @return the new value after incrementing, as a {@code Double}
+     */
+    public Double HIncrByFloat(String key, String field, double increment) {
         return redisTemplate.opsForHash().increment(key, field, increment);
     }
 
-    public Set<Object> HKeys(String key) throws Exception {
+    /**
+     * Retrieves all the field names (keys) from a hash stored at the specified key.
+     *
+     * @param key the key of the hash
+     * @return a set containing all the field names (keys) from the hash
+     */
+    public Set<Object> HKeys(String key) {
         return redisTemplate.opsForHash().keys(key);
     }
 
-    public Long HLen(String key) throws Exception {
+    /**
+     * Returns the number of fields contained in the hash stored at the specified
+     * key.
+     *
+     * @param key the key of the hash
+     * @return the number of fields in the hash, or null if the key does not exist
+     */
+    public Long HLen(String key) {
         return redisTemplate.opsForHash().size(key);
     }
 
-    public List<Object> HMGet(String key, List<Object> fields) throws Exception {
+    /**
+     * Retrieves the values associated with the specified fields from the hash
+     * stored at the given key.
+     *
+     * @param key    the key of the hash
+     * @param fields the fields to retrieve values for
+     * @return a list of values associated with the specified fields, in the same
+     *         order as the fields
+     */
+    public List<Object> HMGet(String key, List<Object> fields) {
         return redisTemplate.opsForHash().multiGet(key, fields);
     }
 
-    public void HMSet(String key, Map<String, String> kvs) throws Exception {
+    /**
+     * Sets the specified fields to their respective values in the hash stored at
+     * key.
+     *
+     * @param key the key of the hash
+     * @param kvs a map containing the field-value pairs to be set
+     */
+    public void HMSet(String key, Map<String, String> kvs) {
         redisTemplate.opsForHash().putAll(key, kvs);
     }
 
-    public void HSet(String key, String field, String value) throws Exception {
+    /**
+     * Sets the value of a field in the hash stored at the specified key.
+     *
+     * @param key   the key of the hash
+     * @param field the field within the hash
+     * @param value the value to be set
+     */
+    public void HSet(String key, String field, String value) {
         redisTemplate.opsForHash().put(key, field, value);
     }
 
-    public Boolean HSetNX(String key, String field, String value) throws Exception {
+    /**
+     * Sets the value of a hash field, only if the field does not exist.
+     *
+     * @param key   the key of the hash
+     * @param field the field within the hash
+     * @param value the value to set
+     * @return {@code true} if the field was set, {@code false} if the field already
+     *         exists
+     */
+    public Boolean HSetNX(String key, String field, String value) {
         return redisTemplate.opsForHash().putIfAbsent(key, field, value);
     }
 
-    public List<Object> HVals(String key) throws Exception {
+    /**
+     * Returns all values associated with the given hash `key`.
+     *
+     * @param key the key of the hash
+     * @return a list containing all values associated with the hash `key`
+     */
+    public List<Object> HVals(String key) {
         return redisTemplate.opsForHash().values(key);
     }
 

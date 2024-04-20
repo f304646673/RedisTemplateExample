@@ -21,9 +21,8 @@ public class ListOperation {
      * @param key   the key of the list
      * @param count the number of elements to remove and return
      * @return the list of removed elements, or an empty list if the timeout expires
-     * @throws Exception if an error occurs while performing the operation
      */
-    public List<String> BLPop(String key, long count) throws Exception {
+    public List<String> BLPop(String key, long count) {
         return redisTemplate.opsForList().leftPop(key, count);
     }
 
@@ -34,9 +33,8 @@ public class ListOperation {
      * @param key   the key of the list
      * @param count the number of elements to remove and return
      * @return the list of removed elements, or an empty list if the timeout expires
-     * @throws Exception if an error occurs while executing the operation
      */
-    public List<String> BRPop(String key, long count) throws Exception {
+    public List<String> BRPop(String key, long count) {
         return redisTemplate.opsForList().rightPop(key, count);
     }
 
@@ -46,9 +44,8 @@ public class ListOperation {
      * @param sourceKey      the key of the source list
      * @param destinationKey the key of the destination list
      * @return the element being popped and pushed
-     * @throws Exception if an error occurs while executing the operation
      */
-    public String BRPopLPush(String sourceKey, String destinationKey) throws Exception {
+    public String BRPopLPush(String sourceKey, String destinationKey) {
         return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey);
     }
 
@@ -62,9 +59,8 @@ public class ListOperation {
      * @param timeout        the maximum time to wait for an element to be available in the source list
      * @param unit           the time unit of the timeout parameter
      * @return the element being popped and pushed, or null if the timeout expires
-     * @throws Exception if an error occurs while performing the operation
      */
-    public String BRPopLPush(String sourceKey, String destinationKey, long timeout, TimeUnit unit) throws Exception {
+    public String BRPopLPush(String sourceKey, String destinationKey, long timeout, TimeUnit unit) {
         return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, unit);
     }
 
@@ -76,9 +72,8 @@ public class ListOperation {
      * @param destinationKey the key of the destination list
      * @param timeout        the maximum time to wait for an element to be available in the source list
      * @return the element being popped and pushed
-     * @throws Exception if an error occurs while performing the operation
      */
-    public String BRPopLPush(String sourceKey, String destinationKey, Duration timeout) throws Exception {
+    public String BRPopLPush(String sourceKey, String destinationKey, Duration timeout) {
         return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout);
     }
 
@@ -88,9 +83,8 @@ public class ListOperation {
      * @param key   the key of the list
      * @param index the index of the element to retrieve
      * @return the element at the specified index, or null if the key or index is invalid
-     * @throws Exception if any error occurs while performing the operation
      */
-    public String LIndex(String key, long index) throws Exception {
+    public String LIndex(String key, long index) {
         return redisTemplate.opsForList().index(key, index);
     }
 
@@ -102,9 +96,8 @@ public class ListOperation {
      * @param value the value to be inserted
      * @param before true to insert the value before the pivot, false to insert it after
      * @return the length of the list after the insert operation
-     * @throws Exception if an error occurs while performing the operation
      */
-    public Long LInsert(String key, String pivot, String value, boolean before) throws Exception {
+    public Long LInsert(String key, String pivot, String value, boolean before) {
         return redisTemplate.opsForList().leftPush(key, pivot, value);
     }
 
@@ -113,9 +106,8 @@ public class ListOperation {
      *
      * @param key the key of the list
      * @return the length of the list
-     * @throws Exception if an error occurs while retrieving the length
      */
-    public Long LLen(String key) throws Exception {
+    public Long LLen(String key) {
         return redisTemplate.opsForList().size(key);
     }
 
@@ -124,9 +116,8 @@ public class ListOperation {
      *
      * @param key the key of the list
      * @return the first element of the list, or null if the list is empty
-     * @throws Exception if an error occurs while performing the operation
      */
-    public String LPop(String key) throws Exception {
+    public String LPop(String key) {
         return redisTemplate.opsForList().leftPop(key);
     }
  
@@ -136,9 +127,8 @@ public class ListOperation {
      * @param key the key of the list
      * @param value the value to be pushed
      * @return the length of the list after the push operation
-     * @throws Exception if an error occurs while performing the operation
      */
-    public Long LPush(String key, String value) throws Exception {
+    public Long LPush(String key, String value) {
         return redisTemplate.opsForList().leftPush(key, value);
     }
 
@@ -148,9 +138,8 @@ public class ListOperation {
      * @param key   the key of the list
      * @param value the value to be pushed
      * @return the length of the list after the push operation
-     * @throws Exception if an error occurs while performing the operation
      */
-    public Long LPushX(String key, String value) throws Exception {
+    public Long LPushX(String key, String value) {
         return redisTemplate.opsForList().leftPushIfPresent(key, value);
     }
 
@@ -161,9 +150,8 @@ public class ListOperation {
      * @param start the start index of the range (inclusive)
      * @param end   the end index of the range (inclusive)
      * @return a list containing the specified range of elements
-     * @throws Exception if an error occurs while retrieving the range
      */
-    public List<String> LRange(String key, long start, long end) throws Exception {
+    public List<String> LRange(String key, long start, long end) {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
@@ -174,9 +162,8 @@ public class ListOperation {
      * @param count the number of occurrences to remove
      * @param value the value to be removed
      * @return the number of removed elements
-     * @throws Exception if an error occurs while removing the elements
      */
-    public Long LRem(String key, long count, String value) throws Exception {
+    public Long LRem(String key, long count, String value) {
         return redisTemplate.opsForList().remove(key, count, value);
     }
 
@@ -186,9 +173,8 @@ public class ListOperation {
      * @param key   the key of the list
      * @param index the index of the element to set
      * @param value the new value to set
-     * @throws Exception if an error occurs while setting the value
      */
-    public void LSet(String key, long index, String value) throws Exception {
+    public void LSet(String key, long index, String value) {
         redisTemplate.opsForList().set(key, index, value);
     }
 
@@ -198,9 +184,8 @@ public class ListOperation {
      * @param key   the key of the list
      * @param start the start index of the range (inclusive)
      * @param end   the end index of the range (inclusive)
-     * @throws Exception if an error occurs while trimming the list
      */
-    public void LTrim(String key, long start, long end) throws Exception {
+    public void LTrim(String key, long start, long end) {
         redisTemplate.opsForList().trim(key, start, end);
     }
 
@@ -209,9 +194,8 @@ public class ListOperation {
      *
      * @param key the key of the list
      * @return the last element from the list, or null if the list is empty or the key does not exist
-     * @throws Exception if an error occurs while executing the Redis command
      */
-    public String RPop(String key) throws Exception {
+    public String RPop(String key) {
         return redisTemplate.opsForList().rightPop(key);
     }
 
@@ -221,9 +205,8 @@ public class ListOperation {
      * @param sourceKey the key of the source list
      * @param destinationKey the key of the destination list
      * @return the element being popped and pushed
-     * @throws Exception if an error occurs while executing the operation
      */
-    public String RPopLPush(String sourceKey, String destinationKey) throws Exception {
+    public String RPopLPush(String sourceKey, String destinationKey) {
         return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey);
     }
 
@@ -233,9 +216,8 @@ public class ListOperation {
      * @param key   the key of the list in Redis
      * @param value the value to be pushed to the list
      * @return the length of the list after the push operation
-     * @throws Exception if any error occurs during the operation
      */
-    public Long RPush(String key, String value) throws Exception {
+    public Long RPush(String key, String value) {
         return redisTemplate.opsForList().rightPush(key, value);
     }
 
@@ -245,9 +227,8 @@ public class ListOperation {
      * @param key   the key of the list
      * @param value the value to be pushed
      * @return the length of the list after the push operation
-     * @throws Exception if an error occurs while performing the operation
      */
-    public Long RPushX(String key, String value) throws Exception {
+    public Long RPushX(String key, String value) {
         return redisTemplate.opsForList().rightPushIfPresent(key, value);
     }
     

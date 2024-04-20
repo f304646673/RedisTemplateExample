@@ -1,6 +1,5 @@
 package org.example.redistemplateexample.redis;
 
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.data.redis.domain.geo.BoundingBox;
 import org.springframework.data.redis.domain.geo.GeoReference;
 import org.springframework.data.redis.domain.geo.GeoShape;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class GeoOperationTest {
-    
+
     @Autowired
     private GeoOperation geoOperation;
 
@@ -113,7 +111,7 @@ public class GeoOperationTest {
             geoOperation.Add(keyChina, new GeoLocation<>("huaibei", new Point(116.799349, 33.971707)));
             geoOperation.Add(keyChina, new GeoLocation<>("bengbu", new Point(117.285755, 33.861501)));
             geoOperation.Add(keyChina, new GeoLocation<>("huainan", new Point(117.018639, 32.642812)));
-            geoOperation.Add(keyChina, new GeoLocation<>("tongling", new Point(117.812079, 30.945515))); 
+            geoOperation.Add(keyChina, new GeoLocation<>("tongling", new Point(117.812079, 30.945515)));
             geoOperation.Add(keyChina, new GeoLocation<>("anqing", new Point(117.043551, 30.50883)));
             geoOperation.Add(keyChina, new GeoLocation<>("huangshan", new Point(118.337481, 29.714655)));
             geoOperation.Add(keyChina, new GeoLocation<>("chuzhou", new Point(118.317325, 32.301556)));
@@ -173,11 +171,10 @@ public class GeoOperationTest {
             geoOperation.Remove(keyChina, "hezhou", "hechi", "laibin", "chongzuo");
             geoOperation.Remove(keyChina, "guilin", "liuzhou", "nanning", "beihai");
             geoOperation.Remove(keyChina, "fangchenggang");
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 
     @Test
@@ -213,7 +210,7 @@ public class GeoOperationTest {
             assertEquals(1, result.longValue());
             geoOperation.Remove(key, "beijing");
         });
-    }   
+    }
 
     @Test
     public void testDist() {
@@ -263,7 +260,8 @@ public class GeoOperationTest {
     public void testRadiusCircleArgs() {
         assertDoesNotThrow(() -> {
             Circle circle = new Circle(new Point(116.405285, 39.904989), new Distance(100, Metrics.KILOMETERS));
-            GeoResults<GeoLocation<String>> points = geoOperation.Radius(keyChina, circle, GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
+            GeoResults<GeoLocation<String>> points = geoOperation.Radius(keyChina, circle,
+                    GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
             assertNotNull(points);
             for (GeoResult<GeoLocation<String>> point : points) {
                 assertNotNull(point.getContent());
@@ -285,7 +283,8 @@ public class GeoOperationTest {
     @Test
     public void testRadiusDistance() {
         assertDoesNotThrow(() -> {
-            GeoResults<GeoLocation<String>> points = geoOperation.Radius(keyChina, "beijing", new Distance(300, Metrics.KILOMETERS));
+            GeoResults<GeoLocation<String>> points = geoOperation.Radius(keyChina, "beijing",
+                    new Distance(300, Metrics.KILOMETERS));
             assertNotNull(points);
             for (GeoResult<GeoLocation<String>> point : points) {
                 assertNotNull(point.getContent());
@@ -296,7 +295,8 @@ public class GeoOperationTest {
     @Test
     public void testRadiusDistanceArgs() {
         assertDoesNotThrow(() -> {
-            GeoResults<GeoLocation<String>> points = geoOperation.Radius(keyChina, "beijing", new Distance(300, Metrics.KILOMETERS), GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
+            GeoResults<GeoLocation<String>> points = geoOperation.Radius(keyChina, "beijing",
+                    new Distance(300, Metrics.KILOMETERS), GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
             assertNotNull(points);
             for (GeoResult<GeoLocation<String>> point : points) {
                 assertNotNull(point.getContent());
@@ -310,7 +310,7 @@ public class GeoOperationTest {
             Long result = geoOperation.Remove(keyChina, "beijing", "shanghai", "guangzhou", "shenzhen");
             assertEquals(4, result.longValue());
         });
-    }   
+    }
 
     @Test
     public void testSearch() {
@@ -342,7 +342,8 @@ public class GeoOperationTest {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
             Distance distance = new Distance(100, Metrics.KILOMETERS);
-            GeoResults<GeoLocation<String>> points = geoOperation.Search(keyChina, reference, distance, GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
+            GeoResults<GeoLocation<String>> points = geoOperation.Search(keyChina, reference, distance,
+                    GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
             assertNotNull(points);
             for (GeoResult<GeoLocation<String>> point : points) {
                 assertNotNull(point.getContent());
@@ -354,7 +355,8 @@ public class GeoOperationTest {
     public void testSearchReferenceBoundingBox() {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
-            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS), new Distance(200, Metrics.KILOMETERS));  
+            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS),
+                    new Distance(200, Metrics.KILOMETERS));
 
             GeoResults<GeoLocation<String>> points = geoOperation.Search(keyChina, reference, boundingBox);
             assertNotNull(points);
@@ -368,9 +370,11 @@ public class GeoOperationTest {
     public void testSearchReferenceBoundingBoxArgs() {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
-            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS), new Distance(200, Metrics.KILOMETERS));  
+            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS),
+                    new Distance(200, Metrics.KILOMETERS));
 
-            GeoResults<GeoLocation<String>> points = geoOperation.Search(keyChina, reference, boundingBox, GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
+            GeoResults<GeoLocation<String>> points = geoOperation.Search(keyChina, reference, boundingBox,
+                    GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
             assertNotNull(points);
             for (GeoResult<GeoLocation<String>> point : points) {
                 assertNotNull(point.getContent());
@@ -384,7 +388,8 @@ public class GeoOperationTest {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
             GeoShape geoShape = GeoShape.byRadius(new Distance(100, Metrics.KILOMETERS));
 
-            GeoResults<GeoLocation<String>> points = geoOperation.Search(keyChina, reference, geoShape, GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
+            GeoResults<GeoLocation<String>> points = geoOperation.Search(keyChina, reference, geoShape,
+                    GeoRadiusCommandArgs.newGeoRadiusArgs().limit(1));
             assertNotNull(points);
             for (GeoResult<GeoLocation<String>> point : points) {
                 assertNotNull(point.getContent());
@@ -407,7 +412,8 @@ public class GeoOperationTest {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
             Distance distance = new Distance(100, Metrics.KILOMETERS);
-            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceDistance", reference, distance);
+            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceDistance", reference,
+                    distance);
             assertEquals(1, result.longValue());
             geoOperation.Remove("testSearchAndStoreReferenceDistance", "beijing");
         });
@@ -418,7 +424,8 @@ public class GeoOperationTest {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
             Distance distance = new Distance(100, Metrics.KILOMETERS);
-            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceDistanceArgs", reference, distance, GeoSearchStoreCommandArgs.newGeoSearchStoreArgs().limit(1));
+            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceDistanceArgs", reference,
+                    distance, GeoSearchStoreCommandArgs.newGeoSearchStoreArgs().limit(1));
             assertEquals(1, result.longValue());
             geoOperation.Remove("testSearchAndStoreReferenceDistanceArgs", "beijing");
         });
@@ -428,8 +435,10 @@ public class GeoOperationTest {
     public void testSearchAndStoreReferenceBoundingBox() {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
-            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS), new Distance(200, Metrics.KILOMETERS));  
-            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceBoundingBox", reference, boundingBox);
+            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS),
+                    new Distance(200, Metrics.KILOMETERS));
+            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceBoundingBox", reference,
+                    boundingBox);
             assertEquals(1, result.longValue());
             geoOperation.Remove("testSearchAndStoreReferenceBoundingBox", "beijing");
         });
@@ -439,8 +448,10 @@ public class GeoOperationTest {
     public void testSearchAndStoreReferenceBoundingBoxArgs() {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
-            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS), new Distance(200, Metrics.KILOMETERS));  
-            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceBoundingBoxArgs", reference, boundingBox, GeoSearchStoreCommandArgs.newGeoSearchStoreArgs().limit(1));
+            BoundingBox boundingBox = new BoundingBox(new Distance(100, Metrics.KILOMETERS),
+                    new Distance(200, Metrics.KILOMETERS));
+            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceBoundingBoxArgs", reference,
+                    boundingBox, GeoSearchStoreCommandArgs.newGeoSearchStoreArgs().limit(1));
             assertEquals(1, result.longValue());
             geoOperation.Remove("testSearchAndStoreReferenceBoundingBoxArgs", "beijing");
         });
@@ -451,11 +462,11 @@ public class GeoOperationTest {
         assertDoesNotThrow(() -> {
             GeoReference<String> reference = GeoReference.fromMember("beijing");
             GeoShape geoShape = GeoShape.byRadius(new Distance(100, Metrics.KILOMETERS));
-            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceGeoShape", reference, geoShape, GeoSearchStoreCommandArgs.newGeoSearchStoreArgs().limit(1));
+            Long result = geoOperation.SearchAndStore(keyChina, "testSearchAndStoreReferenceGeoShape", reference,
+                    geoShape, GeoSearchStoreCommandArgs.newGeoSearchStoreArgs().limit(1));
             assertEquals(1, result.longValue());
             geoOperation.Remove("testSearchAndStoreReferenceGeoShape", "beijing");
         });
     }
-    
 
 }
