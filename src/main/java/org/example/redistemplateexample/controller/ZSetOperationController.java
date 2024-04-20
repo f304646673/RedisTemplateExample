@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,7 +85,7 @@ public class ZSetOperationController {
         @Parameter(name = "value", description = "Value"),
         @Parameter(name = "delta", description = "Increment")
     })
-    @PostMapping("/zincrby")
+    @PutMapping("/zincrby")
     public Double incrBy(@RequestParam(value = "key") String
             key, @RequestParam(value = "value") String value, @RequestParam(value = "delta") double delta) {
         Double result = null;
@@ -171,6 +172,44 @@ public class ZSetOperationController {
         return 0L;
     }
 
+    @Operation(summary = "Retrieves a range of elements from a sorted set stored at the specified key, ordered from highest to lowest score")
+    @Parameters({
+        @Parameter(name = "key", description = "Key"),
+        @Parameter(name = "start", description = "Start index"),
+        @Parameter(name = "end", description = "End index")
+    })
+    @PostMapping("/zrevrange")
+    public Set<String> revRange(@RequestParam(value = "key") String
+            key, @RequestParam(value = "start") long start, @RequestParam(value = "end") long end) {
+        Set<String> result = null;
+        try {
+            result = zSetOperation.ZRevRange(key, start, end);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Operation(summary = "Retrieves a range of elements from a sorted set stored at the specified key, ordered from highest to lowest score")   
+    @Parameters({
+        @Parameter(name = "key", description = "Key"),
+        @Parameter(name = "min", description = "Min score"),
+        @Parameter(name = "max", description = "Max score")
+    })
+    @PostMapping("/zrevrangebyscore")
+    public Set<String> revRangeByScore(@RequestParam(value = "key") String
+            key, @RequestParam(value = "min") double min, @RequestParam(value = "max") double max) {
+        Set<String> result = null;
+        try {
+            result = zSetOperation.ZRevRangeByScore(key, min, max);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }   
+
     @Operation(summary = "Remove members by index range")
     @Parameters({
         @Parameter(name = "key", description = "Key"),
@@ -218,6 +257,80 @@ public class ZSetOperationController {
         Double result = null;
         try {
             result = zSetOperation.ZScore(key, value);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Operation(summary = "Get Union of sorted sets")
+    @Parameters({
+        @Parameter(name = "key", description = "Key"),
+        @Parameter(name = "otherKey", description = "otherKey")
+    })
+    @GetMapping("/zunion")
+    public Set<String> union(@RequestParam(value = "key") String
+            key, @RequestParam(value = "otherKey") String otherKey) {
+        Set<String> result = null;
+        try {
+            result = zSetOperation.ZUnion(key, otherKey);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Operation(summary = "Get Union of sorted sets and store in destination")
+    @Parameters({
+        @Parameter(name = "key", description = "Key"),
+        @Parameter(name = "otherKey", description = "otherKey"),
+        @Parameter(name = "destKey", description = "destKey")
+    })
+    @PostMapping("/zunionstore")
+    public Long unionStore(@RequestParam(value = "key") String
+            key, @RequestParam(value = "otherKey") String otherKey, @RequestParam(value = "destKey") String destKey) {
+        Long result = null;
+        try {
+            result = zSetOperation.ZUnionAndStore(key, otherKey, destKey);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Operation(summary = "Get Intersection of sorted sets")
+    @Parameters({
+        @Parameter(name = "key", description = "Key"),
+        @Parameter(name = "otherKey", description = "otherKey")
+    })
+    @GetMapping("/zinter")
+    public Set<String> inter(@RequestParam(value = "key") String
+            key, @RequestParam(value = "otherKey") String otherKey) {
+        Set<String> result = null;
+        try {
+            result = zSetOperation.ZInter(key, otherKey);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Operation(summary = "Get Intersection of sorted sets and store in destination")
+    @Parameters({
+        @Parameter(name = "key", description = "Key"),
+        @Parameter(name = "otherKey", description = "otherKey"),
+        @Parameter(name = "destKey", description = "destKey")
+    })
+    @PostMapping("/zinterstore")
+    public Long interStore(@RequestParam(value = "key") String
+            key, @RequestParam(value = "otherKey") String otherKey, @RequestParam(value = "destKey") String destKey) {
+        Long result = null;
+        try {
+            result = zSetOperation.ZInterAndStore(key, otherKey, destKey);
         }
         catch (Exception e) {
             e.printStackTrace();

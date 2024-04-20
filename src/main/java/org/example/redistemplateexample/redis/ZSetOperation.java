@@ -222,7 +222,7 @@ public class ZSetOperation {
     /**
      * Retrieves a range of elements from a sorted set stored at the specified key,
      * with scores between the given minimum and maximum values (inclusive), in reverse order.
-     *
+     * 
      * @param key    the key of the sorted set
      * @param min    the minimum score value
      * @param max    the maximum score value
