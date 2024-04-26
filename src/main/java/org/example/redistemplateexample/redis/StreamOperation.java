@@ -1,7 +1,6 @@
 package org.example.redistemplateexample.redis;
 
 import jakarta.annotation.Resource;
-
 import java.util.List;
 import java.util.Map;
 import java.time.Duration;
@@ -11,10 +10,12 @@ import lombok.val;
 import org.springframework.data.domain.Range;
 import org.springframework.data.domain.Range.Bound;
 import org.springframework.data.redis.connection.stream.*;
+import org.springframework.data.redis.connection.stream.Record;
+import org.springframework.data.redis.connection.stream.RecordId;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.data.redis.connection.Limit;
-
+import org.springframework.data.redis.connection.RedisStreamCommands.XClaimOptions;
 @Component
 public class StreamOperation {
     @Resource
@@ -104,5 +105,39 @@ public class StreamOperation {
             recordIds.add(record.getId().getValue());
         });
         return redisTemplate.opsForStream().delete(streamKey, recordIds.toArray(new String[0]));
+    }
+
+    public StreamInfo.XInfoConsumers consumers(String streamKey, String consumerGroup) {
+        return redisTemplate.opsForStream().consumers(streamKey, consumerGroup);
+    }
+
+    public Boolean deleteConsumer(String streamKey, String consumerGroup, String consumerName) {
+        Consumer consumer = Consumer.from(consumerGroup, consumerName);
+        return redisTemplate.opsForStream().deleteConsumer(streamKey, consumer);
+    }
+
+    public String readAndPass(String streamKey, String consumerGroup) {
+        String consumerName = "" + System.currentTimeMillis();
+
+        Consumer consumer = Consumer.from(consumerGroup, consumerName);
+        StreamReadOptions options = StreamReadOptions.empty().count(1).block(Duration.ofSeconds(30));
+        StreamOffset<String> streamOffset = StreamOffset.create(streamKey, ReadOffset.lastConsumed());
+        @SuppressWarnings("unchecked")
+        List<MapRecord<String,Object,Object>> list = redisTemplate.opsForStream().read(consumer, options, streamOffset);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        val record = list.getFirst();
+
+        redisTemplate.opsForStream().deleteConsumer(streamKey, consumer);
+
+        StreamInfo.XInfoConsumers consumers = consumers(streamKey, consumerGroup);
+        for (StreamInfo.XInfoConsumer consumerInfo : consumers) {
+            redisTemplate.opsForStream().add(streamKey, record.getValue());
+            // System.out.printf("Claiming message %s for consumer %s%n", record.getId().getValue() , consumerInfo.consumerName());
+            // redisTemplate.opsForStream().claim(streamKey, consumerGroup, consumerInfo.consumerName(), Duration.ofMillis(100), RecordId.of(record.getId().getValue()));
+        }
+
+        return record.toString();
     }
 }

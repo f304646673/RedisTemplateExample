@@ -170,4 +170,35 @@ public class StreamOperationController {
     public Long deleteEqualLessThan(@RequestParam String streamKey, @RequestParam String recordId) {
         return streamOperation.deleteEqualLessThan(streamKey, recordId);
     }
+
+    @Operation(summary = "Get the consumers of a stream")
+    @Parameters({
+        @Parameter(name = "streamKey", description = "The key of the stream"),
+        @Parameter(name = "consumerGroup", description = "The name of the consumer group")
+    })
+    @GetMapping
+    public String consumers(@RequestParam String streamKey, @RequestParam String consumerGroup) {
+        return streamOperation.consumers(streamKey, consumerGroup).toString();
+    }
+
+    @Operation(summary = "Delete a consumer group")
+    @Parameters({
+        @Parameter(name = "streamKey", description = "The key of the stream"),
+        @Parameter(name = "consumerGroup", description = "The name of the consumer group"),
+        @Parameter(name = "consumerName", description = "The name of the consumer")
+    })
+    @DeleteMapping("/delete_consumer_group")
+    public Boolean deleteConsumer(@RequestParam String streamKey, @RequestParam String consumerGroup, @RequestParam String consumerName) {
+        return streamOperation.deleteConsumer(streamKey, consumerGroup, consumerName);
+    }
+
+    @Operation(summary = "Read and pass a message")
+    @Parameters({
+        @Parameter(name = "streamKey", description = "The key of the stream"),
+        @Parameter(name = "consumerGroup", description = "The name of the consumer group")
+    })
+    @GetMapping("/read_and_pass")
+    public String readAndPass(@RequestParam String streamKey, @RequestParam String consumerGroup) {
+        return streamOperation.readAndPass(streamKey, consumerGroup);
+    }
 }
