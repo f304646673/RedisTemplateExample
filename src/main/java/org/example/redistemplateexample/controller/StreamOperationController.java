@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
-import org.springframework.web.service.annotation.DeleteExchange;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -83,7 +82,7 @@ public class StreamOperationController {
     })
     @GetMapping("/pending_messages")
     public String pendingMessages(@RequestParam String streamKey, @RequestParam String consumerGroup, @RequestParam String consumerName) {
-        return streamOperation.PendingMessages(streamKey, consumerGroup, consumerName).toString();
+        return streamOperation.pendingMessages(streamKey, consumerGroup, consumerName).toString();
     }
     
     @Operation(summary = "Get the pending messages summary of a consumer group")
@@ -93,29 +92,28 @@ public class StreamOperationController {
     })
     @GetMapping("/pending_messages_summary")
     public String pendingMessagesSummary(@RequestParam String streamKey, @RequestParam String consumerGroup) {
-        return streamOperation.PendingMessagesSummary(streamKey, consumerGroup).toString();
+        return streamOperation.pendingMessagesSummary(streamKey, consumerGroup).toString();
     }
 
     @Operation(summary = "Acknowledge a message")
     @Parameters({
         @Parameter(name = "streamKey", description = "The key of the stream"),
         @Parameter(name = "consumerGroup", description = "The name of the consumer group"),
-        @Parameter(name = "consumerName", description = "The name of the consumer"),
         @Parameter(name = "recordId", description = "The ID of the message")
     })
     @PutMapping("/acknowledge")
-    public Long acknowledge(@RequestParam String streamKey, @RequestParam String consumerGroup, @RequestParam String consumerName, @RequestParam String recordId) {
-        return streamOperation.ack(streamKey, consumerGroup, consumerName, recordId);
+    public Long acknowledge(@RequestParam String streamKey, @RequestParam String consumerGroup, @RequestParam String recordId) {
+        return streamOperation.ack(streamKey, consumerGroup, recordId);
     }
 
-    @Operation(summary = "Read a message from a stream")
+    @Operation(summary = "Read the first message from a stream")
     @Parameters({
         @Parameter(name = "streamKey", description = "The key of the stream"),
         @Parameter(name = "recordId", description = "The ID of the message")
     })
-    @GetMapping("/get_message")
+    @GetMapping("/get_first_message")
     public String getMessage(@RequestParam String streamKey, @RequestParam String recordId) {
-        return streamOperation.readMessage(streamKey, recordId).toString();
+        return streamOperation.readFirstMessage(streamKey, recordId).toString();
     }
 
     @Operation(summary = "Read all messages from a stream")

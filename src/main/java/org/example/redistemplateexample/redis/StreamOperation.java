@@ -7,6 +7,7 @@ import java.util.Map;
 import java.time.Duration;
 
 import lombok.val;
+
 import org.springframework.data.domain.Range;
 import org.springframework.data.domain.Range.Bound;
 import org.springframework.data.redis.connection.stream.*;
@@ -40,8 +41,9 @@ public class StreamOperation {
         Consumer consumer = Consumer.from(consumerGroup, consumerName);
         StreamReadOptions options = StreamReadOptions.empty().count(1).block(Duration.ofSeconds(1000));
         StreamOffset<String> streamOffset = StreamOffset.create(streamKey, ReadOffset.lastConsumed());
+        @SuppressWarnings("unchecked")
         List<MapRecord<String,Object,Object>> list = redisTemplate.opsForStream().read(consumer, options, streamOffset);
-        if (list.isEmpty()) {
+        if (list == null || list.isEmpty()) {
             return null;
         }
         val record = list.getFirst();
@@ -52,23 +54,26 @@ public class StreamOperation {
         return redisTemplate.opsForStream().size(streamKey);
     }
 
-    public PendingMessages PendingMessages(String streamKey, String consumerGroup, String consumerName) {
+    public PendingMessages pendingMessages(String streamKey, String consumerGroup, String consumerName) {
         Consumer consumer = Consumer.from(consumerGroup, consumerName);
         return redisTemplate.opsForStream().pending(streamKey, consumer);
     }
 
-    @SuppressWarnings("null")
-    public PendingMessagesSummary PendingMessagesSummary(String streamKey, String consumerGroup) {
+    public PendingMessagesSummary pendingMessagesSummary(String streamKey, String consumerGroup) {
         return redisTemplate.opsForStream().pending(streamKey, consumerGroup);
     }   
 
-    public Long ack(String streamKey, String consumerGroup, String consumerName, String recordId) {
+    public Long ack(String streamKey, String consumerGroup, String recordId) {
         return redisTemplate.opsForStream().acknowledge(streamKey, consumerGroup, recordId);
     }
 
-    public MapRecord<String,Object,Object> readMessage(String streamKey, String recordId) {
-        List<MapRecord<String,Object,Object>> list = redisTemplate.opsForStream().read(StreamOffset.create(streamKey, ReadOffset.from(recordId)));
-        if (list.isEmpty()) {
+    public MapRecord<String,Object,Object> readFirstMessage(String streamKey, String recordIdStart) {
+        ReadOffset fromOffset = ReadOffset.from(recordIdStart);
+        StreamOffset<String> streamOffset = StreamOffset.create(streamKey, fromOffset);
+        
+        @SuppressWarnings("unchecked")
+        List<MapRecord<String,Object,Object>> list = redisTemplate.opsForStream().read(streamOffset);
+        if (list == null || list.isEmpty()) {
             return null;
         }
         return list.getFirst();
@@ -91,7 +96,11 @@ public class StreamOperation {
     public Long deleteEqualLessThan(String streamKey, String recordId) {
         Range<String> range = Range.leftUnbounded(Bound.inclusive(recordId));
         List<String> recordIds = new java.util.ArrayList<>();
-        redisTemplate.opsForStream().range(streamKey, range, Limit.unlimited()).forEach(record -> {
+        List<MapRecord<String,Object,Object>> records = redisTemplate.opsForStream().range(streamKey, range, Limit.unlimited());
+        if (null == records || records.isEmpty()) {
+            return 0L;
+        }
+        records.forEach(record -> {
             recordIds.add(record.getId().getValue());
         });
         return redisTemplate.opsForStream().delete(streamKey, recordIds.toArray(new String[0]));
