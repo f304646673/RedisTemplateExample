@@ -10,12 +10,11 @@ import lombok.val;
 import org.springframework.data.domain.Range;
 import org.springframework.data.domain.Range.Bound;
 import org.springframework.data.redis.connection.stream.*;
-import org.springframework.data.redis.connection.stream.Record;
 import org.springframework.data.redis.connection.stream.RecordId;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.data.redis.connection.Limit;
-import org.springframework.data.redis.connection.RedisStreamCommands.XClaimOptions;
+
 @Component
 public class StreamOperation {
     @Resource
