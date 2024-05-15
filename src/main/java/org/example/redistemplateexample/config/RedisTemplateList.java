@@ -1,6 +1,5 @@
 package org.example.redistemplateexample.config;
 
-import org.springframework.boot.autoconfigure.cache.CacheProperties.Redis;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;

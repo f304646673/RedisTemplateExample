@@ -1,8 +1,6 @@
 package org.example.redistemplateexample.redis;
 
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
