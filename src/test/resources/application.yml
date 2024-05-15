@@ -1,0 +1,22 @@
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'Controller'
+      paths-to-match: '/**'
+      packages-to-scan: org.example.redistemplateexample.controller
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
