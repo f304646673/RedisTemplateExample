@@ -14,15 +14,15 @@ public class RedisTemplateList {
     @Resource
     private RedisPool redisPool;
 
-    public <T, T1> RedisTemplate<T, T1> getRedisTemplate(int index) {
+    public <T> RedisTemplate<String, T> getRedisTemplate(int index) {
         LettuceConnectionFactory lettuceConnectionFactory = redisPool.getRedisConnectionFactorys().get(index);
         if (lettuceConnectionFactory == null) {
             return null;
         }
-        RedisTemplate<T, T1> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String, T> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
-        redisTemplate.setValueSerializer(RedisSerializer.string());
-        redisTemplate.setHashValueSerializer(RedisSerializer.string());
+        redisTemplate.setValueSerializer(RedisSerializer.json());
+        redisTemplate.setHashValueSerializer(RedisSerializer.json());
         redisTemplate.setKeySerializer(RedisSerializer.string());
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
         redisTemplate.afterPropertiesSet();
