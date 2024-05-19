@@ -15,7 +15,7 @@ public class FastJsonOperation<T>  {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    public T Get(String key) {
+    public Object Get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 }
