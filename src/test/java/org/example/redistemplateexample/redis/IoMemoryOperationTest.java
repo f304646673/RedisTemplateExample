@@ -1,21 +1,19 @@
 package org.example.redistemplateexample.redis;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.example.redistemplateexample.pojo.BaseTypes;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class IoMemoryOperationTest {
-
     @Autowired
     private IoMemoryOperation<BaseTypes> ioMemoryOperation;
 
     @Test
     public void testSetGet() {
-        BaseTypes key = generate(1);
+        String key = "IoMemoryOperationTest";
         BaseTypes value = generate(2);
 
         ioMemoryOperation.Set(key, value);

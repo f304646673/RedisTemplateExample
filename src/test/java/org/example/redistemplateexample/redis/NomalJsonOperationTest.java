@@ -1,8 +1,7 @@
 package org.example.redistemplateexample.redis;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.example.redistemplateexample.pojo.BaseTypes;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +14,7 @@ public class NomalJsonOperationTest {
     
     @Test
     public void testSetGet() {
-        BaseTypes key = generate(1);
+        String key = "NomalJsonOperationTest";
         BaseTypes value = generate(2);
 
         nomalJsonOperation.Set(key, value);

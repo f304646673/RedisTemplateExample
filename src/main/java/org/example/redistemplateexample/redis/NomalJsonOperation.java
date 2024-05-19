@@ -1,20 +1,20 @@
 package org.example.redistemplateexample.redis;
 
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import jakarta.annotation.Resource;
-import org.springframework.stereotype.Component;
 
 @Component
 public class NomalJsonOperation<T> {
     @Resource(name = "nomaljsonRedisTemplate")
-    public RedisTemplate<T, T> redisTemplate;
+    public RedisTemplate<String, T> redisTemplate;
 
-    public void Set(T key, T value) {
+    public void Set(String key, T value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    public T Get(T key) {
+    public T Get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 }

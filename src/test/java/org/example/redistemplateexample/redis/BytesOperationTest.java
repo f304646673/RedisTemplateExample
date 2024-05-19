@@ -1,14 +1,13 @@
 package org.example.redistemplateexample.redis;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ByteArrayOutputStream;
 
 import org.example.redistemplateexample.pojo.BaseTypes;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,7 +39,7 @@ public class BytesOperationTest {
             fail();
             throw new RuntimeException(e);
         }
-        byte[] get = bytesOperation.Get("baseTypes");
+        byte[] get = bytesOperation.Get(key);
 
         BaseTypes baseTypesTo = null;
         try {

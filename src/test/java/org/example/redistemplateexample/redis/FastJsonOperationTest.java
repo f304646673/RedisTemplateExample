@@ -1,8 +1,10 @@
 package org.example.redistemplateexample.redis;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import org.example.redistemplateexample.pojo.BaseTypes;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,11 +17,11 @@ public class FastJsonOperationTest {
     
     @Test
     public void testSetGet() {
-        BaseTypes key = generate(1);
+        String key = "FastJsonOperationTest";
         BaseTypes value = generate(2);
 
         fastJsonOperation.Set(key, value);
-        Object result = fastJsonOperation.Get(key);
+        BaseTypes result = JSONObject.parseObject(JSON.toJSONString(fastJsonOperation.Get(key)), BaseTypes.class);
 
         assertEquals(value, result);
     }
