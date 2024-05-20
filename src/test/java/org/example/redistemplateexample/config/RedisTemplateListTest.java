@@ -54,4 +54,15 @@ public class RedisTemplateListTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testGetRedisTemplate1() {
+        RedisTemplate<String, String> stringRedisTemplate = redisTemplateList.getRedisTemplate(1);
+        assertNotNull(stringRedisTemplate);
+        String key = "key";
+        String value = "value";
+        stringRedisTemplate.opsForValue().set(key, value);
+        String result = stringRedisTemplate.opsForValue().get(key);
+        assertNotNull(result);
+    }
 }

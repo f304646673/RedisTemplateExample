@@ -15,6 +15,7 @@ import org.springframework.data.redis.connection.RedisNode.RedisNodeBuilder;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnection;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.util.Pair;
@@ -73,7 +74,7 @@ public class RedisPool {
     }
 
     private LettuceClientConfiguration getClientConfiguration(RedisPoolConfig.Config config) {
-        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+        GenericObjectPoolConfig<LettuceConnection> poolConfig = new GenericObjectPoolConfig<LettuceConnection>();
         if (null != config.getMaxActive() && !config.getMaxActive().isEmpty()) {
             poolConfig.setMaxTotal(Integer.parseInt(config.getMaxActive()));
         }
