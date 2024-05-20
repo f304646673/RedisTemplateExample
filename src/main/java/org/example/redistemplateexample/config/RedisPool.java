@@ -67,7 +67,7 @@ public class RedisPool {
                     break;
             }
             if (null != redisConnectionFactory) {
-                redisConnectionFactory.start();
+                redisConnectionFactory.start(); // start() for spring-data-redis-3.X; afterPropertiesSet() for spring-data-redis-2.X 
                 redisConnectionFactorys.add(redisConnectionFactory);
             }
         }
