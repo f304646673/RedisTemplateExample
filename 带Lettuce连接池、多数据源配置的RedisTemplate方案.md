@@ -95,7 +95,7 @@ public class RedisPool {
 我们使用线程安全的Lettuce客户端。核心的一些配置如下：
 ```java
     private LettuceClientConfiguration getClientConfiguration(RedisPoolConfig.Config config) {
-        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+        GenericObjectPoolConfig<LettuceConnection> poolConfig = new GenericObjectPoolConfig<LettuceConnection>();
         if (null != config.getMaxActive() && !config.getMaxActive().isEmpty()) {
             poolConfig.setMaxTotal(Integer.parseInt(config.getMaxActive()));
         }
@@ -113,9 +113,8 @@ public class RedisPool {
             timeout = Integer.parseInt(config.getTimeout());
         }
 
-        LettuceClientConfiguration clientConfig = LettucePoolingClientConfiguration.builder()
+        return LettucePoolingClientConfiguration.builder()
                 .shutdownTimeout(Duration.ofMillis(timeout)).poolConfig(poolConfig).build();
-        return clientConfig;
     }
 ```
 ## Sentinel（哨兵）模式
@@ -213,7 +212,6 @@ import lombok.Data;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.data.redis.connection.NamedNode;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConfiguration.WithDatabaseIndex;
 import org.springframework.data.redis.connection.RedisConfiguration.WithPassword;
@@ -223,6 +221,7 @@ import org.springframework.data.redis.connection.RedisNode.RedisNodeBuilder;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnection;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.util.Pair;
@@ -281,7 +280,7 @@ public class RedisPool {
     }
 
     private LettuceClientConfiguration getClientConfiguration(RedisPoolConfig.Config config) {
-        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+        GenericObjectPoolConfig<LettuceConnection> poolConfig = new GenericObjectPoolConfig<LettuceConnection>();
         if (null != config.getMaxActive() && !config.getMaxActive().isEmpty()) {
             poolConfig.setMaxTotal(Integer.parseInt(config.getMaxActive()));
         }
@@ -311,7 +310,7 @@ public class RedisPool {
         }
 
         List<Pair<String, Integer>> sentinels = parseClusterHostAndPort(config.getSentinelMasterHostAndPort());
-        if (sentinels.isEmpty()) {
+        if (sentinels.size() != 1) {
             return null;
         }
         for (Pair<String, Integer> sentinel : sentinels) {
@@ -420,7 +419,6 @@ public class RedisPool {
         return hostAndPorts;
     }
 }
-
 ```
 # 工具类
 工具类主要封装了RedisTemplate，并且通过下标确定该RedisTemplate使用哪个连接配置。
