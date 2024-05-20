@@ -10,6 +10,8 @@ import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConfiguration.WithDatabaseIndex;
 import org.springframework.data.redis.connection.RedisConfiguration.WithPassword;
 import org.springframework.data.redis.connection.RedisNode;
+import org.springframework.data.redis.connection.RedisNode.NodeType;
+import org.springframework.data.redis.connection.RedisNode.RedisNodeBuilder;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
@@ -101,12 +103,13 @@ public class RedisPool {
         }
 
         List<Pair<String, Integer>> sentinels = parseClusterHostAndPort(config.getSentinelMasterHostAndPort());
-        if (sentinels.isEmpty()) {
+        if (sentinels.size() != 1) {
             return null;
         }
         for (Pair<String, Integer> sentinel : sentinels) {
-            RedisNode node = new RedisNode(sentinel.getFirst(), sentinel.getSecond());
-            redisSentinelConfiguration.addSentinel(node);
+            RedisNodeBuilder builder = RedisNode.newRedisNode().withName(config.getMasterName()).promotedAs(NodeType.MASTER).listeningAt(sentinel.getFirst(), sentinel.getSecond());
+            RedisNode node = builder.build();
+            redisSentinelConfiguration.setMaster(node);
         }
 
         List<Pair<String, Integer>> hostAndPorts = parseClusterHostAndPort(config.getHostAndPort());
@@ -114,9 +117,15 @@ public class RedisPool {
             return null;
         }
         for (Pair<String, Integer> hostAndPort : hostAndPorts) {
-            RedisNode node = new RedisNode(hostAndPort.getFirst(), hostAndPort.getSecond());
+            RedisNodeBuilder builder = RedisNode.newRedisNode().promotedAs(NodeType.REPLICA).listeningAt(hostAndPort.getFirst(), hostAndPort.getSecond()); 
+            RedisNode node = builder.build();
             redisSentinelConfiguration.addSentinel(node);
         }
+
+        setUsername(config, redisSentinelConfiguration);
+        setPassword(config, redisSentinelConfiguration);
+        setDatabase(config, redisSentinelConfiguration);
+
         return redisSentinelConfiguration;
     }
 

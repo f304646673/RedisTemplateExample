@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "redis-pool")
@@ -25,6 +24,7 @@ public class RedisPoolConfig {
         private String password;
         private String database;
         private String sentinelMasterHostAndPort; // for Sentine
+        private String masterName; // for Sentine
         private String clusterMaxRedirects; // for Cluster
         private String timeout;
         private String maxActive;
